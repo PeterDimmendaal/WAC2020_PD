@@ -1,0 +1,35 @@
+body {
+    background-color: #c0c0c0;
+}
+
+h1 {
+    color: white;
+    background-color: #808080;
+}
+label {
+    width: 800px;
+    border: 1px solid black;
+}
+table{
+    border-collapse: collapse;
+    border-spacing: 0;
+    width: 100%;
+    color: white;
+    border: 1px solid black;
+    background-color: #3939399e;
+}
+tr:hover {
+    color: pink;
+    cursor: pointer;
+}
+th, td{
+    text-align: left;
+    padding: 4px;
+}
+div#countryList {
+    overflow-x: auto;
+}
+
+div.update {
+    display: none;
+}

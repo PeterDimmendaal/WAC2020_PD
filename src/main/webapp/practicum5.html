@@ -1,0 +1,68 @@
+<html>
+<script src="JavaScript/WeatherService.js"></script>
+<link rel="stylesheet" href="Style/WeatherService.css">
+<link rel="stylesheet" href="Style/SmallWeatherService.css">
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Weather API</title>
+
+<body onload="initPage()">
+<div id="frame">
+	<form id="loginform">
+		<input type="text" name="username" />
+		<input type="password" name="password" />
+		<input type="button" value="login" id="login" />
+	</form>
+
+	<div id="myLocation">
+		<h1>My Location!</h1>
+		<label id="Landcode">Landcode:</label><br>
+		<label id="Land">Land:</label><br>
+		<label id="Regio">Regio:</label><br>
+		<label id="Stad">Stad:</label><br>
+		<label id="Postcode">Postcode:</label><br>
+		<label id="Latitude">Latitude:</label><br>
+		<label id="Longitude">Longitude:</label><br>
+		<label id="IP">IP:</label>
+	</div>
+	<div id="weatherInfo">
+		<h1 id="Titel"></h1>
+		<label id="Temp">Temperatuur</label><br>
+		<label id="Lucht"></label><br>
+		<label id="WindS"></label><br>
+		<label id="WindR"></label><br>
+		<label id="ZonOp"></label><br>
+		<label id="ZonOn"></label>
+	</div>
+	<div id="countryList">
+		<h1>Beschikbare vakantiebestemmingen</h1>
+		<div id="update" class="update">
+			<form id="updateCountry">
+				Code:<br>
+				<input type="hidden" id="code" name="code"/>
+				<br>
+				Land:<br>
+				<input type="text" id="land" name="land"/>
+				<br>
+				Hoofdstad:<br>
+				<input type="text" id="hoofdstad" name="hoofdstad"/>
+				<br>
+				Regio:<br>
+				<input type="text" id="regio" name="regio"/>
+				<br>
+				Oppervlakte:<br>
+				<input type="number" id="oppervlakte" name="oppervlakte"/>
+				<br>
+				Inwoners:<br>
+				<input type="number" id="inwoners" name="inwoners"/>
+				<br>
+			</form>
+			<button id="doUpdate">wijzigen</button>
+		</div>
+		<table id="tabel">
+			<tr>
+				<th>land</th><th>hoofdstad</th><th>regio</th><th>oppervlakte</th><th>inwoners</th>
+			</tr>
+		</table>
+	</div>
+</div>
