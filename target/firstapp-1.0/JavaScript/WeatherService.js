@@ -7,8 +7,8 @@ function initPage() {
         .then(function(data) {
             ding = data
             document.getElementById("Landcode").innerHTML = "Landcode: " + ding.country;
-            document.getElementById("Land").innerHTML = "Land: " + ding.country_name;
-            document.getElementById("Regio").innerHTML = "Regio: " + ding.region;
+            document.getElementById("LandLoca").innerHTML = "Land: " + ding.country_name;
+            document.getElementById("RegioLoca").innerHTML = "Regio: " + ding.region;
             document.getElementById("Stad").innerHTML = "Stad: " + ding.city;
             document.querySelector("#Stad").addEventListener("click", function(){
                 showWeather(ding.latitude, ding.longitude, ding.city);
