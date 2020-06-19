@@ -22,15 +22,12 @@ function initPage() {
         })
 }
 
-function hoi(){
-    console.log('hoi');
-}
 
 function showWeather(latitude, longitude, city) {
     var d = Date.now();
     document.getElementById("Titel").innerHTML = "Het weer in " + city;
     if (window.sessionStorage.getItem(city + 'Time') === null || d - 600000 > window.sessionStorage.getItem(city + 'Time')) {
-        fetch('https://api.openweathermap.org/data/2.5/weather?lat=' + latitude + '&lon=' + longitude + '&units=metric&APPID=5028d4adbc0654bfb3e3d9bf5340bf3b')
+        fetch('https://api.openweathermap.org/data/2.5/weather?lat=' + latitude + '&lon=' + longitude + '&units=metric&APPID=2e6e4402a94f50fa2a60e12757b77eb0')
             .then (function(res){
                 return (res.text());
             })
