@@ -14,9 +14,9 @@ public class CalculatorServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 		throws ServletException, IOException {
 			String bepaald = null;
-			int totaal = 0;
-			int waarde1 = Integer.parseInt(req.getParameter("Waarde1"));
-			int waarde2 = Integer.parseInt(req.getParameter("Waarde2"));
+			double totaal = 0;
+			double waarde1 = Integer.parseInt(req.getParameter("Waarde1"));
+			double waarde2 = Integer.parseInt(req.getParameter("Waarde2"));
 			String optellen = req.getParameter("Optellen");
 			String delen = req.getParameter("Delen");
 			String vermenigvuldig = req.getParameter("Vermenigvuldig");
