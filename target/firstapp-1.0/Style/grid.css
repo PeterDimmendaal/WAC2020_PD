@@ -1,0 +1,30 @@
+@media only screen and (min-width: 700px) {
+    
+
+#frame {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr auto;
+}
+
+#Logindiv{
+	grid-column: 1/3; grid-row: 1;
+}
+#myLocation{
+		grid-column: 1/2; grid-row: 2;
+	
+}
+
+#weatherInfo{
+		grid-column: 2/3; grid-row: 2;
+}
+
+#SetGrid{
+		grid-column: 1/3; grid-row: 3;
+	
+}
+
+#Othergid{
+		grid-column: 1/3; grid-row:4;
+}
+}

@@ -1,26 +1,27 @@
 package nl.hu.v1wac.firstapp.persistence;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.Statement;
 
-public class UserPostgresDaoImpl extends PostgresBaseDao implements UserDao{
+
+public class UserPostgresDaoImpl extends PostgresBaseDao implements UserDao {
 
 	public String findRoleForUser(String name, String pass) {
-		String result = "";
-		String query = String.format("SELECT role FROM useraccount WHERE username = '%s' AND password = '%s'", name, pass);
-		try (Connection con = super.getConnection()) {
-			PreparedStatement ps = con.prepareStatement(query);
-			ResultSet ds = ps.executeQuery();
-			while (ds.next()) {
-				result += ds.getString("role");
-			}
-		} catch (SQLException sqle) {
-			sqle.printStackTrace();
-		}
-		return result;
-	}
-	
+		String role = null;
 
+		try (Connection connection = super.getConnection()) {
+			Statement stmt = connection.createStatement();
+			ResultSet resultset = stmt.executeQuery("Select * from useraccount where username='" + name + "' and password='" + pass + "';");
+
+			while (resultset.next()) {
+				role = (resultset.getString("role"));
+			}
+			resultset.close();
+			stmt.close();
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+		return role;
+	}
 }

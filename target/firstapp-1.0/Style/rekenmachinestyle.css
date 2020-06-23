@@ -1,3 +1,9 @@
+body{
+    background-image: url("cleanbg.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
 div#frame {
 background-color: gray;
 margin: 1em;

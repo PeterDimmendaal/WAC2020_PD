@@ -1,8 +1,7 @@
-package nl.hu.v1wac.firstapp.webservices;
+package nl.hu.v1wac.firstapp.model;
 
 public class Country {
 	private String code;
-	private String iso3;
 	private String name;
 	private String capital;
 	private String continent;
@@ -13,9 +12,8 @@ public class Country {
 	private double latitude;
 	private double longitude;
 	
-	public Country(String code, String iso3, String nm, String cap, String ct, String reg, double sur, int pop, String gov, double lat, double lng) {
+	public Country(String code, String nm, String cap, String ct, String reg, double sur, int pop, String gov) {
 		this.code = code; 
-		this.iso3 = iso3;
 		this.name = nm;
 		this.capital = cap;
 		this.continent = ct;
@@ -23,16 +21,10 @@ public class Country {
 		this.surface = sur;
 		this.population = pop;
 		this.government = gov;
-		this.latitude = lat;
-		this.longitude = lng;
 	}
 	
 	public String getCode() {
 		return code;
-	}
-	
-	public String getIso3() {
-		return iso3;
 	}
 	
 	public String getName() {
@@ -70,4 +62,26 @@ public class Country {
 	public double getLongitude() {
 		return longitude;
 	}
+	
+	public void setName(String nm) {
+		this.name = name;
+	}
+	
+	public void setCapital(String capital) {
+		this.capital = capital;
+	}
+	
+	public void setRegion(String capital) {
+		this.region = region;
+	}
+	
+	public void setSurface(double surface) {
+		this.surface = surface;
+	}
+	
+	public void setPopulation(int population) {
+		this.population = population;
+	}
+
+
 }

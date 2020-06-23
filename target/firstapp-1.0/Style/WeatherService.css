@@ -1,35 +1,65 @@
-body {
-    background-color: #c0c0c0;
+
+body{
+	background-color: #d8d5ce;
 }
 
-h1 {
-    color: white;
-    background-color: #808080;
-}
-label {
-    width: 800px;
-    border: 1px solid black;
-}
-table{
-    border-collapse: collapse;
-    border-spacing: 0;
-    width: 100%;
-    color: white;
-    border: 1px solid black;
-    background-color: #3939399e;
-}
-tr:hover {
-    color: pink;
-    cursor: pointer;
-}
-th, td{
-    text-align: left;
-    padding: 4px;
-}
-div#countryList {
-    overflow-x: auto;
+h1{
+	color: white;
+	background-color: gray;
+	padding : 10px;
+	font-weight: bold;
 }
 
-div.update {
-    display: none;
+.hoofdstad:hover{
+	background-color: brown;
+	
+}
+.hoofdstad{
+	cursor: pointer;
+}
+
+#countryList{
+	background-color: gray;
+	padding: 10px;
+	width: 100%;
+}
+
+#CODE {
+	position: absolute;
+    left: 100px;
+}
+
+#HOOFDSTAD{
+	position: absolute;
+    left: 100px;
+}
+
+#LAND{
+	position: absolute;
+    left: 100px;
+}
+
+#REGION{
+	position: absolute;
+    left: 100px;
+}
+
+#OPPERVLAKTE{
+	position: absolute;
+    left: 100px;
+}
+
+#INWONERS{
+	position: absolute;
+    left: 100px;
+}
+
+#OVERHEID{
+	position: absolute;
+    left: 100px;
+}
+
+#CONTINENT{
+	position: absolute;
+    left: 100px;
 }

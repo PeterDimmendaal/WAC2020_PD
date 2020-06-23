@@ -1,179 +1,342 @@
-var ding;
-function initPage() {
-    fetch('https://ipapi.co/json/')
-        .then(function(response){
-            return (response.json());
-        })
-        .then(function(data) {
-            ding = data
-            document.getElementById("Landcode").innerHTML = "Landcode: " + ding.country;
-            document.getElementById("LandLoca").innerHTML = "Land: " + ding.country_name;
-            document.getElementById("RegioLoca").innerHTML = "Regio: " + ding.region;
-            document.getElementById("Stad").innerHTML = "Stad: " + ding.city;
-            document.querySelector("#Stad").addEventListener("click", function(){
-                showWeather(ding.latitude, ding.longitude, ding.city);
-            });
-            document.getElementById("Postcode").innerHTML = "Postcode: " + ding.postal;
-            document.getElementById("Latitude").innerHTML = "Latitude: " + ding.latitude;
-            document.getElementById("Longitude").innerHTML = "Longitude: " + ding.longitude;
-            document.getElementById("IP").innerHTML = "IP: " + ding.ip;
-            showWeather(ding.latitude, ding.longitude, ding.city)
-            loadCountries()
-        })
-}
+
+function initpage(){
+fetch("https://ipapi.co/json")
+  .then(response => response.json())
+
+  .then(function(myJson){
+  	var country = document.createTextNode(myJson.country);
+    var countryname = document.createTextNode(myJson.country_name);
+    var region = document.createTextNode(myJson.region);
+    var city = document.createTextNode(myJson.city);
+    var postal = document.createTextNode(myJson.postal);
+    var latitude = document.createTextNode(myJson.latitude);
+    var longitude = document.createTextNode(myJson.longitude);
+    var ip = document.createTextNode(myJson.ip);
 
 
-function showWeather(latitude, longitude, city) {
-    var d = Date.now();
-    document.getElementById("Titel").innerHTML = "Het weer in " + city;
-    if (window.sessionStorage.getItem(city + 'Time') === null || d - 600000 > window.sessionStorage.getItem(city + 'Time')) {
-        fetch('https://api.openweathermap.org/data/2.5/weather?lat=' + latitude + '&lon=' + longitude + '&units=metric&APPID=2e6e4402a94f50fa2a60e12757b77eb0')
-            .then (function(res){
-                return (res.text());
-            })
-            .then(function(data) {
-                var x = JSON.parse(data);
-                window.sessionStorage.setItem(city, data)
-                window.sessionStorage.setItem(city + 'Time', d);
-                var zop = x.sys.sunrise;
-                var date = new Date(zop * 1000);
-                var zod = x.sys.sunset;
-                var date2 = new Date(zod * 1000);
 
-                document.getElementById("Temp").innerHTML = 'Temperatuur: ' + x.main.temp;
-                document.getElementById("Lucht").innerHTML = 'Luchtvochtigheid: ' + x.main.humidity;
-                document.getElementById("WindS").innerHTML = 'Windsnelheid: ' + x.wind.speed + 'm/s';
-                document.getElementById("WindR").innerHTML = 'Windrichting: ' + degToCompass(x.wind.deg);
-                document.getElementById("ZonOp").innerHTML = 'Zonsopgang: ' + date.toLocaleTimeString();
-                document.getElementById("ZonOn").innerHTML = 'Zonsondergang: ' + date2.toLocaleTimeString();
-            })
+    document.querySelector("#landcode").append(country);
+    document.querySelector("#land").append(countryname);
+    document.querySelector("#regio").append(region);
+    document.querySelector("#stad").append(city);
+    document.querySelector("#postcode").append(postal);
+    document.querySelector("#latitude").append(latitude);
+    document.querySelector("#longitude").append(longitude);
+    document.querySelector("#ip").append(ip);
+    
+    if(window.sessionStorage.getItem('username') == null){
+        document.querySelector("#h1").innerHTML = "Ingelogd als";
+    }else{
+        document.querySelector("#h1").innerHTML = "Ingelogd als " + window.sessionStorage.getItem('username');
     }
-    else {
-        var y = JSON.parse(window.sessionStorage.getItem(city));
-        var zop = y.sys.sunrise;
-        var date = new Date(zop * 1000);
-        var zod = y.sys.sunset;
-        var date2 = new Date(zod * 1000);
 
-        document.getElementById("Temp").innerHTML = 'Temperatuur: ' + y.main.temp;
-        document.getElementById("Lucht").innerHTML = 'Luchtvochtigheid: ' + y.main.humidity;
-        document.getElementById("WindS").innerHTML = 'Windsnelheid: ' + y.wind.speed + 'm/s';
-        document.getElementById("WindR").innerHTML = 'Windrichting: ' + degToCompass(y.wind.deg);
-        document.getElementById("ZonOp").innerHTML = 'Zonsopgang: ' + date.toLocaleTimeString();
-        document.getElementById("ZonOn").innerHTML = 'Zonsondergang: ' + date2.toLocaleTimeString();
-    }
+
+    weatherInfo(myJson.city);
+    loadCountries();
+    weizigLand();
+    toevoegenLand();
+    login();
+  });
 }
+function weatherInfo(city){
+	
 
-function degToCompass(num) {
-    var val = Math.floor((num / 22.5) + 0.5);
-    var arr = ["Noord", "Noord Noord Oost", "Noord Oost", "Oost Noord Oost", "Oost", "Oost Zuid Oost", "Zuid Oost", "Zuid Zuid Oost", "Zuid", "Zuid Zuid West", "Zuid West", "West Zuid West", "West", "West Noord West", "Noord West", "Noord Noord West"];
-    return arr[(val % 16)];
-}
+	    if(window.localStorage.getItem(city) != null && JSON.parse(window.localStorage.getItem(city)).name === city && JSON.parse(window.localStorage.getItem(city)).time > new Date().getTime()){
+	        
+	    	var weerdata = JSON.parse(window.localStorage.getItem(city));
 
-function deleteCountry(code) {
-    fetch('restservices/countries/delete/' + code)
-        .then (function(res){
-            return (res.text());
-        })
-        .then (function(data){
-            console.log(data);
-        })
-}
+	        console.log("INFORMATIE UIT LOCALSTORAGE");
+	        var sunriseM = new Date((weerdata.sys.sunrise) * 1000);
+	        var sunsetM = new Date((weerdata.sys.sunset) * 1000);
 
+	        var sunset = sunsetM.getHours() + ":" + sunsetM.getMinutes() + ":" + sunsetM.getSeconds();
+	        var sunrise = sunriseM.getHours() + ":" + sunriseM.getMinutes() + ":" + sunriseM.getSeconds();
+	        
+	        var windrichting = weerdata.wind.deg;
+	        var windrichingen 
+	        
+	        if(windrichting > 247 && windrichting < 290){
+	        	windrichtingen = "West"
+	        }
+	        else if(windrichting > 201 && windrichting < 247){
+	        	windrichtingen = "Zuid West"
+	        }
+	        else if(windrichting > 157 && windrichting < 202){
+	        	windrichtingen = "Zuid"
+	        }
+	        else if(windrichting > 111 && windrichting < 157){
+	        	windrichtingen = "Zuid Oost"
+	        }
+	        else if(windrichting > 67 && windrichting < 111){
+	        	windrichtingen = "Oost"
+	        }
+	        else if(windrichting > 21 && windrichting < 67){
+	        	windrichtingen = "Noord Oost"
+	        }
+	        else if(windrichting > 337 && windrichting < 21){
+	        	windrichtingen = "Noord"
+	        }
+	        else if(windrichting > 292 && windrichting < 337){
+	        	windrichtingen = "Noord West"
+	        }
+	       
+	        var temperatuur = (weerdata.main.temp - 273.15).toFixed(1);
 
-function openForm(code, name, capital, region, surface, population) {
-    document.getElementById("update").style.display = "block";
-    document.getElementById("code").defaultValue = code;
-    document.getElementById("land").defaultValue = name;
-    document.getElementById("hoofdstad").defaultValue = capital;
-    document.getElementById("regio").defaultValue = region;
-    document.getElementById("oppervlakte").defaultValue = surface;
-    document.getElementById("inwoners").defaultValue = population;
-}
+	        document.querySelector("#temperatuur").innerHTML = temperatuur;
+	        document.querySelector("#luchtvochtigheid").innerHTML = weerdata.main.humidity;
+	        document.querySelector("#windsnelheid").innerHTML = weerdata.wind.speed;
+	        document.querySelector("#windrichting").innerHTML = windrichtingen;
+	        document.querySelector("#zonsopgang").innerHTML = sunrise;
+	        document.querySelector("#zonsondergang").innerHTML = sunset;
+	        document.querySelector("#h2").innerHTML = "Het weer in " + weerdata.name;
 
-function closeForm() {
-    document.getElementById("update").style.display = "none";
-}
+	    }else{
+	fetch("https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=208f85213b9c300d1b445708c11a9d80")
+	        .then(response => response.json())
+	        .then(function(weerdata) {
+	        console.log("INFORMATIE OP HALEN");
 
-function updateCountry() {
-    var formData = new FormData(document.querySelector("#updateCountry"));
-    var encData = new URLSearchParams(formData.entries());
-    fetch('restservices/countries/update', { method : 'PUT', headers : { 'Authorization': 'Bearer ' +  window.sessionStorage.getItem("sessionToken") }, body : encData })
-        .then (function(response){
-            if (response.ok) {
-                console.log('wijziging voltooid');
-                closeForm();
-                initPage();
-            }
-            else {
-                console.log('eerst inloggen');
-                closeForm();
-                initPage();
-            }
-        })
-}
+	        weerdata["time"] = new Date().getTime() + 600000;
+	        console.log(weerdata["time"]);
+	        window.localStorage.setItem(city, JSON.stringify(weerdata));
+	        var sunriseM = new Date((weerdata.sys.sunrise) * 1000);
+	        var sunsetM = new Date((weerdata.sys.sunset) * 1000);
+
+	        var sunset = sunsetM.getHours() + ":" + sunsetM.getMinutes() + ":" + sunsetM.getSeconds();
+	        var sunrise = sunriseM.getHours() + ":" + sunriseM.getMinutes() + ":" + sunriseM.getSeconds();
+
+	        var temperatuur = (weerdata.main.temp - 273.15).toFixed(1);
+
+	        document.querySelector("#temperatuur").innerHTML = temperatuur;
+	        document.querySelector("#luchtvochtigheid").innerHTML = weerdata.main.humidity;
+	        document.querySelector("#windsnelheid").innerHTML = weerdata.wind.speed;
+	        document.querySelector("#windrichting").innerHTML = weerdata.wind.deg;
+	        document.querySelector("#zonsopgang").innerHTML = sunrise;
+	        document.querySelector("#zonsondergang").innerHTML = sunset;
+	        document.querySelector("#h2").innerHTML = "Het weer in " + weerdata.name;
+	        });
+	    }
+	}
+
 
 function loadCountries(){
-    fetch('restservices/countries')
-        .then (function(res){
-            return (res.text());
+   fetch("restservices/countries/")
+    .then(response => response.json())
+
+    .then(function(landen){
+
+
+      for( const land of landen){
+        var row = document.createElement("tr");        
+        	row.className = "hoofdstad";
+
+        row.setAttribute("id", land.capital);
+        row.addEventListener("click",function(){
+        	weatherChange(this.id);
+        	weatherInfo(this.id);
+
+        	
+          
+        });
+
+        var codeColumn = document.createElement("td");
+        var codeText = document.createTextNode(land.code);
+        codeColumn.appendChild(codeText);
+        row.appendChild(codeColumn);
+        
+        var countryColumn = document.createElement("td");
+        var countryText = document.createTextNode(land.countries);
+        countryColumn.appendChild(countryText);
+        row.appendChild(countryColumn);
+
+        var capitalColumn = document.createElement("td");
+        var capitalText = document.createTextNode(land.capital);
+        capitalColumn.setAttribute("id", land.capital);
+        capitalColumn.appendChild(capitalText);
+        row.appendChild(capitalColumn);
+
+        var regionColumn = document.createElement("td");
+        var regionText = document.createTextNode(land.regio);
+        regionColumn.appendChild(regionText);
+        row.appendChild(regionColumn);
+
+        var surfaceColumn = document.createElement("td");
+        var surfaceText = document.createTextNode(land.surface);
+        surfaceColumn.appendChild(surfaceText);
+        row.appendChild(surfaceColumn);
+
+        var populationColumn = document.createElement("td");
+        var populationText = document.createTextNode(land.populatie);
+        populationColumn.appendChild(populationText);
+        row.appendChild(populationColumn);
+
+        var updateColumn = document.createElement("td");
+        var update = document.createElement("button");
+        update.innerHTML = 'wijzig';
+        update.setAttribute = ('id', land.capital);
+        row.appendChild(updateColumn);
+        updateColumn.appendChild(update);
+        
+        var verwijderColumn = document.createElement("td");
+        var verwijder = document.createElement("button");
+        verwijder.innerHTML = 'delete';
+        update.setAttribute = ('id', land.capital);
+        row.appendChild(verwijderColumn);
+        verwijderColumn.appendChild(verwijder);
+        
+        row.appendChild(verwijderColumn);
+        
+        document.querySelector("#countryList").appendChild(row);
+        
+        update.addEventListener("click", function (){
+          document.querySelector("#code").setAttribute("value", land.code)
+      	  document.querySelector("#Land").setAttribute("value", land.countries);
+      	  document.querySelector("#hoofdstad").setAttribute("value", land.capital);
+      	  document.querySelector("#region").setAttribute("value", land.regio);
+      	  document.querySelector("#oppervlakte").setAttribute("value", land.surface);
+      	  document.querySelector("#inwoners").setAttribute("value", land.populatie);
+      	  
         })
-        .then(function(data) {
-            var countries = JSON.parse(data);
-            var tabel = document.getElementById("tabel");
-            tabel.innerHTML = "<tr><th>land</th><th>hoofdstad</th><th>regio</th><th>oppervlakte</th><th>inwoners</th></tr>"
-            for (let country of countries) {
+        
+      	verwijder.addEventListener("click", function(){
+      		 var id = land.code;
+      		 
+      		var fetchoptions = {method: 'DELETE', headers: {'Authorization' : 'Bearer ' + window.sessionStorage.getItem("sessionToken")}};
+      		
+      		 console.log(id);
+          	  fetch("restservices/countries/" + id, fetchoptions)
+          	  .then(function(response){
+          		  if(response.ok)
+          			  console.log("Land verwijderd"),
+          			  location.reload();
+          		  else if (response.status == 404)
+          			  console.log("Land niet gevonden");
+          		  else console.log("kan land niet verwijderen");
+          	  })
 
-                var deletebutton = document.createElement("button");
-                var deletetext = document.createTextNode("Delete");
-                deletebutton.appendChild(deletetext);
-                deletebutton.addEventListener("click", function(){
-                    deleteCountry(country.code);
-                    initPage();
-                })
+          });
 
-                var alterbutton = document.createElement("button");
-                alterbutton.appendChild(document.createTextNode("wijzig"))
-                alterbutton.addEventListener("click", function(){
-                    openForm(country.code, country.name, country.capital, country.region, country.surface, country.population);
-                })
-
-                var tablerow = document.createElement("tr");
-                tablerow.id = country.code;
-                var gegevens = [country.name, country.capital, country.region, country.surface, country.population];
-                tablerow.addEventListener("click", function(){
-                    showWeather(country.lat, country.lng, country.capital);
-                });
-                for (var gegeven of gegevens) {
-                    var tabled = document.createElement("td");
-                    var text = document.createTextNode(gegeven);
-                    tabled.appendChild(text);
-                    tablerow.appendChild(tabled);
-                }
-                tablerow.appendChild(alterbutton);
-                tablerow.appendChild(deletebutton);
-                tabel.appendChild(tablerow);
-            }
-        })
-    document.querySelector("#doUpdate").addEventListener("click", function(){
-        updateCountry();
-    })
-
-    function login(event) {
-        var inlog = new FormData(document.querySelector("#loginform"));
-        var inlogEncData = new URLSearchParams(inlog.entries());
-
-        fetch("restservices/authentication", { method: 'POST', body: inlogEncData })
-            .then(function(response) {
-                if (response.ok) return response.json();
-                else throw "Wrong username/password";
-            })
-            .then(myJson => window.sessionStorage.setItem("sessionToken", myJson.JWT))
-            .catch(error => console.log(error));
-        //console.log(window.sessionStorage.getItem("sessionToken"));
-    }
-
-    document.querySelector("#login").addEventListener("click", login);
-
-
+        
+      }
+      
+      
+    });
 }
+
+function weizigLand(){
+	document.querySelector("#opslaan").addEventListener("click", function(){
+  	  var land = document.querySelector("#code").value;
+  	  var formData = new FormData(document.querySelector("#updateform"));
+  	  var encData = new URLSearchParams(formData.entries());
+  	  
+  	  var fetchoptions = {method: 'PUT', body:encData, headers: {'Authorization' : 'Bearer ' + window.sessionStorage.getItem("sessionToken")}};
+
+  	  fetch ("restservices/countries/" + land, fetchoptions)
+  	  .then (response => response.json())
+  	  .then (function(myJson){ console.log(myJson); location.reload; })
+    })
+}
+
+function toevoegenLand(){
+	  document.querySelector("#toevoegen").addEventListener("click", function (){
+      var formData = new FormData(document.querySelector("#toevoegform"));
+      var encData = new URLSearchParams(formData.entries());
+      
+      var fetchoptions = {method: 'POST', body:encData, headers: {'Authorization' : 'Bearer ' + window.sessionStorage.getItem("sessionToken")}};
+      
+      fetch("restservices/countries/", fetchoptions)
+      .then(response => response.json())
+      .then(function(myJson){ console.log(myJson); });
+      
+      location.reload();
+      
+	})
+}
+
+
+
+function weatherChange(city){
+	 var url = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=d6aa861e299de982958d6d096764a496";
+	  fetch(url)
+	    .then(response => response.json())
+
+	    .then(function(myJson){
+
+	      var sunset1 = new Date((myJson.sys.sunset) * 1000);
+	      var sunrise1 = new Date((myJson.sys.sunrise )* 1000);
+
+	      var sunset = sunset1.getHours() + ":" + sunset1.getMinutes() + ":" + sunset1.getSeconds();
+	      var sunrise = sunrise1.getHours() + ":" + sunrise1.getMinutes() + ":" + sunrise1.getSeconds();
+
+	      var windrichting = weerdata.wind.deg;
+	        var windrichingen 
+	        
+	        if(windrichting > 247 && windrichting < 290){
+	        	windrichtingen = "West"
+	        }
+	        else if(windrichting > 201 && windrichting < 247){
+	        	windrichtingen = "Zuid West"
+	        }
+	        else if(windrichting > 157 && windrichting < 202){
+	        	windrichtingen = "Zuid"
+	        }
+	        else if(windrichting > 111 && windrichting < 157){
+	        	windrichtingen = "Zuid Oost"
+	        }
+	        else if(windrichting > 67 && windrichting < 111){
+	        	windrichtingen = "Oost"
+	        }
+	        else if(windrichting > 21 && windrichting < 67){
+	        	windrichtingen = "Noord Oost"
+	        }
+	        else if(windrichting > 337 && windrichting < 21){
+	        	windrichtingen = "Noord"
+	        }
+	        else if(windrichting > 292 && windrichting < 337){
+	        	windrichtingen = "Noord West"
+	        }
+	       
+
+	      document.querySelector("#temperatuur").innerHTML= myJson.main.temp - 273 ;
+	      document.querySelector("#luchtvochtigheid").innerHTML= myJson.main.humidity;
+	      document.querySelector("#zonsopgang").innerHTML=sunset;
+	      document.querySelector("#zonsondergang").innerHTML= sunrise;
+	      document.querySelector("#windrichting").innerHTML=myJson.wind.deg;
+	      document.querySelector("#windsnelheid").innerHTML=myJson.wind.speed;
+	      
+	      document.querySelector("#h2").innerHTML = "Het weer in "  + city;
+	      
+	  })
+}
+
+
+function login(event){
+    document.querySelector("#login").addEventListener("click", function(){
+
+	 var username = document.querySelector("#username").value;
+	 var password = document.querySelector("#password").value;
+	 window.sessionStorage.setItem('username', username);
+	 window.sessionStorage.setItem('password', password);
+
+	 var formData = new FormData(document.querySelector("#loginform"));
+	 var encData = new URLSearchParams(formData.entries());
+	 
+
+	 fetch("restservices/authentication", { method : 'POST', body: encData})
+	        .then(function(response){
+	         if(response.ok){
+	            location.reload();
+	            alert("U bent succesvol ingelogd");
+	            return response.json();
+	          }else{
+	                alert("Wrong username/password");
+	                throw "Wrong username/password";
+	    }})
+
+	            .then(myToken => window.sessionStorage.setItem("sessionToken", myToken.JWT))
+	            .catch(error => console.log(error));
+	    });
+}
+
+
+initpage();
