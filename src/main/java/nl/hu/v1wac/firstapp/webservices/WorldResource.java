@@ -162,14 +162,14 @@ public class WorldResource {
 	@RolesAllowed("user")
 	@Produces("application/json")
 	public Response addCountry(@Context SecurityContext sc,	
-							   @FormParam("CODE")String c,
-							   @FormParam("LAND")String nm,
-							   @FormParam("HOOFDSTAD") String h,
-							   @FormParam("REGION") String r,
-							   @FormParam("OPPERVLAKTE") double o,
-							   @FormParam("INWONERS") int i,
-							   @FormParam("OVERHEID")String g,
-							   @FormParam("CONTINENT")String cn){
+							   @FormParam("addCode")String c,
+							   @FormParam("addCountry")String nm,
+							   @FormParam("addCapital") String h,
+							   @FormParam("addRegion") String r,
+							   @FormParam("addOpp") double o,
+							   @FormParam("addPop") int i,
+							   @FormParam("addGov")String g,
+							   @FormParam("addCon")String cn){
 		
 		Country newLand = service.saveLand(c, nm, h, r, o, i, g, cn);
 		System.out.println(newLand);
