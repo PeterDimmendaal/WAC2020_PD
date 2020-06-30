@@ -326,9 +326,10 @@ function login(event){
 	 fetch("restservices/authentication", { method : 'POST', body: encData})
 	        .then(function(response){
 	         if(response.ok){
-	            location.reload();
 	            alert("U bent succesvol ingelogd");
+	            location.reload();
 	            return response.json();
+
 	          }else{
 	                alert("Wrong username/password");
 	                throw "Wrong username/password";
